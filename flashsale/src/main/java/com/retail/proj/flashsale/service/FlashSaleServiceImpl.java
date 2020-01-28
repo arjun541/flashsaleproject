@@ -85,6 +85,9 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 		}
 		else
 		{
+			synchronized(of){
+				
+			
 			fr.setCustomer(oc.get());
 			fr.setFlashSale(of.get());
 			fr.setId(oc.get().getId()+"-"+of.get().getId());
@@ -105,6 +108,7 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 				regresult.setMessage("Successfully registered");
 
 			}
+			}
 
 		}
 
@@ -117,7 +121,7 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 		// TODO Auto-generated method stub
 		Optional<FlashSaleRegistration> osr=registrationrepo.findById(customerId+"-"+flashSaleId);
 		
-		PurchaseOrder po=new PurchaseOrder();
+		PurchaseOrder po=null;
 		FlashSale fs=null;
 		int itemsAvailable;
 		if(osr.isPresent())
@@ -129,13 +133,13 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 				if(fs.getStatus())
 				{
 				itemsAvailable=fs.getUnitsAvailable()-1;
-				System.out.println("items available----------"+itemsAvailable);
+			
 
-				if(itemsAvailable>=0)
+				if(itemsAvailable>0)
 				fs.setUnitsAvailable(itemsAvailable);
 				else
 					fs.setStatus(false);
-				
+				po=new PurchaseOrder();
 				flashSalerepo.saveAndFlush(fs);
 				po.setCreatedAt(new Date());
 				po.setCustomer(customerrepo.getOne(customerId));
@@ -149,6 +153,7 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 
 
 		}
+	
 		return po;
 
 	}
