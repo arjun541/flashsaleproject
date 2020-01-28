@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.retail.proj.flashsale.model.FlashSale;
 import com.retail.proj.flashsale.model.FlashSaleRegistration;
+import com.retail.proj.flashsale.model.PurchaseOrder;
 import com.retail.proj.flashsale.pojo.FlashSaleRegistrationResult;
 import com.retail.proj.flashsale.pojo.RegistrationRequest;
 import com.retail.proj.flashsale.service.FlashSaleSerice;
@@ -36,6 +37,18 @@ public class FlashSaleController {
 	{
 	
 		FlashSaleRegistrationResult fg1=flashsaleserviceimpl.registerForSale(fr.getCustomerId(),fr.getFlashSaleId());
+		
+		
+		return fg1;
+		
+	}
+	
+@PostMapping(path="/purchase")
+	
+	public PurchaseOrder purchase(@RequestBody RegistrationRequest fr)
+	{
+	
+		PurchaseOrder fg1=flashsaleserviceimpl.purchaseFromSale(fr.getCustomerId(),fr.getFlashSaleId());
 		
 		
 		return fg1;
