@@ -37,4 +37,53 @@ public class PurchaseOrder {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
     private PurchaseOrderStatus orderStatus;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public PurchaseOrderStatus getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(PurchaseOrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+    
 }

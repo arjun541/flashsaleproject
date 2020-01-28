@@ -1,14 +1,25 @@
-package com.retail.proj.flashsale.controller;
 
+
+package com.retail.proj.flashsale.controller;
+/*
+ * 
+ * 
+ * @Author- Mallikarjuna Reddy Bachu
+ * 
+ * purpose- FlashSaleController is the controller for handling the sale Registration and sale purchase services
+ */
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.retail.proj.flashsale.exceptionhandlers.InvalidRequestException;
 import com.retail.proj.flashsale.model.FlashSale;
 import com.retail.proj.flashsale.model.FlashSaleRegistration;
 import com.retail.proj.flashsale.model.PurchaseOrder;
@@ -33,25 +44,28 @@ public class FlashSaleController {
 	
 	@PostMapping(path="/register")
 	
-	public FlashSaleRegistrationResult registerForSale(@RequestBody RegistrationRequest fr)
+	public ResponseEntity<Object> registerForSale(@RequestBody RegistrationRequest fr)
 	{
 	
 		FlashSaleRegistrationResult fg1=flashsaleserviceimpl.registerForSale(fr.getCustomerId(),fr.getFlashSaleId());
-		
-		
-		return fg1;
+		if(fg1.getMessage().equalsIgnoreCase("Successfully registered"))
+			return ResponseEntity.accepted().body(fg1);
+		else if(fg1.getMessage().equalsIgnoreCase("Already Registered!!"))
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(fg1);
+					
+		return ResponseEntity.badRequest().body(fg1);
 		
 	}
 	
 @PostMapping(path="/purchase")
 	
-	public PurchaseOrder purchase(@RequestBody RegistrationRequest fr)
+	public ResponseEntity<Object> purchase(@RequestBody RegistrationRequest fr)
 	{
 	
 		PurchaseOrder fg1=flashsaleserviceimpl.purchaseFromSale(fr.getCustomerId(),fr.getFlashSaleId());
 		
 		
-		return fg1;
+		return ResponseEntity.accepted().body(fg1);
 		
 	}
 }

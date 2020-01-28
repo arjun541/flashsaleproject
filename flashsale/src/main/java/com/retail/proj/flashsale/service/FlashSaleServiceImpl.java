@@ -1,5 +1,6 @@
 package com.retail.proj.flashsale.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +17,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import com.retail.proj.flashsale.exceptionhandlers.InvalidRequestException;
 import com.retail.proj.flashsale.model.Customer;
 import com.retail.proj.flashsale.model.FlashSale;
 import com.retail.proj.flashsale.model.FlashSaleRegistration;
 import com.retail.proj.flashsale.model.PurchaseOrder;
 import com.retail.proj.flashsale.pojo.FlashSaleRegistrationResult;
+import com.retail.proj.flashsale.pojo.PurchaseOrderStatus;
 import com.retail.proj.flashsale.repository.CustomerRepository;
 import com.retail.proj.flashsale.repository.FlashSaleRepository;
+import com.retail.proj.flashsale.repository.OrderRepository;
 import com.retail.proj.flashsale.repository.RegistrationRepository;
 import com.zaxxer.hikari.metrics.prometheus.PrometheusMetricsTrackerFactory.RegistrationStatus;
 
@@ -35,6 +39,9 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 	CustomerRepository customerrepo;
 	@Autowired
 	RegistrationRepository registrationrepo;
+	
+	@Autowired
+	OrderRepository orderrepo;
 
 
 	@Override
@@ -62,7 +69,7 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 		if(!oc.isPresent())
 		{
 
-			regresult.setMessage(" Invalid customer");
+			regresult.setMessage("Invalid Customer");
 		}
 
 
@@ -87,7 +94,7 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 			if(fg.isPresent())
 			{
 				regresult.setStatus(true);
-				regresult.setMessage("ALready Registered!!");
+				regresult.setMessage("Already Registered!!");
 
 			}
 			else
@@ -109,6 +116,8 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 	public PurchaseOrder purchaseFromSale(Integer customerId, Integer flashSaleId) {
 		// TODO Auto-generated method stub
 		Optional<FlashSaleRegistration> osr=registrationrepo.findById(customerId+"-"+flashSaleId);
+		
+		PurchaseOrder po=new PurchaseOrder();
 		FlashSale fs=null;
 		int itemsAvailable;
 		if(osr.isPresent())
@@ -128,13 +137,19 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 					fs.setStatus(false);
 				
 				flashSalerepo.saveAndFlush(fs);
+				po.setCreatedAt(new Date());
+				po.setCustomer(customerrepo.getOne(customerId));
+				po.setOrderStatus(PurchaseOrderStatus.PURCHASED);
+				po.setProduct(fs.getProduct());
+				po=orderrepo.saveAndFlush(po);
+				
 				}
 
 			}
 
 
 		}
-		return null;
+		return po;
 
 	}
 }
