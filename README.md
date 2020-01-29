@@ -19,3 +19,6 @@ Buyer can only register if the flashsale is not running or open for registartion
 flashsale is started/stopped manually
 Purchase limit per buyer per flashsale is 1
 Payment is abstracted out and considered successful before purchase() API is invoked.
+
+all the database preload scripts in data.sql file
+
