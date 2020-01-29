@@ -18,3 +18,32 @@ Payment is abstracted out and considered successful before purchase() API is inv
 
 all the database preload scripts in data.sql file
 
+
+
+api endpoints :
+
+to register : 
+localhost:8999/register
+
+sample request : {
+
+    "customerId":"1",
+    "flashSaleId":"1"
+	
+	
+}
+
+
+to purchase  :
+
+
+localhost:8999/purchase
+
+
+sample request : {
+
+    "customerId":"1",
+    "flashSaleId":"1"
+	
+	
+}
