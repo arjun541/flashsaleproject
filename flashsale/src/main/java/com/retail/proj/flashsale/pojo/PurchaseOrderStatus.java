@@ -5,6 +5,7 @@ public enum PurchaseOrderStatus {
 	
 	    DELIVERED,
 	    PURCHASED,
-	    CANCELLED
+	    CANCELLED,
+	    ALREADYPURCHASED
 	}
 

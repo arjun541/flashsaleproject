@@ -23,7 +23,7 @@ public class PurchaseOrder {
     private Product product;
 
     @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @Column(name = "created_at", columnDefinition = "timestamp without time zone")

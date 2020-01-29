@@ -39,7 +39,7 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 	CustomerRepository customerrepo;
 	@Autowired
 	RegistrationRepository registrationrepo;
-	
+
 	@Autowired
 	OrderRepository orderrepo;
 
@@ -86,28 +86,28 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 		else
 		{
 			synchronized(of){
-				
-			
-			fr.setCustomer(oc.get());
-			fr.setFlashSale(of.get());
-			fr.setId(oc.get().getId()+"-"+of.get().getId());
-			Optional<FlashSaleRegistration> fg=registrationrepo.findById(oc.get().getId()+"-"+of.get().getId());
 
-			regresult.setRegistrationId(oc.get().getId()+"-"+of.get().getId());
-			if(fg.isPresent())
-			{
-				regresult.setStatus(true);
-				regresult.setMessage("Already Registered!!");
 
-			}
-			else
-			{
-				fr.setRegistrationStatus(com.retail.proj.flashsale.pojo.RegistrationStatus.REGISTERED);
-				fr=registrationrepo.saveAndFlush(fr);
-				regresult.setStatus(true);
-				regresult.setMessage("Successfully registered");
+				fr.setCustomer(oc.get());
+				fr.setFlashSale(of.get());
+				fr.setId(oc.get().getId()+"-"+of.get().getId());
+				Optional<FlashSaleRegistration> fg=registrationrepo.findById(oc.get().getId()+"-"+of.get().getId());
 
-			}
+				regresult.setRegistrationId(oc.get().getId()+"-"+of.get().getId());
+				if(fg.isPresent())
+				{
+					regresult.setStatus(true);
+					regresult.setMessage("Already Registered!!");
+
+				}
+				else
+				{
+					fr.setRegistrationStatus(com.retail.proj.flashsale.pojo.RegistrationStatus.REGISTERED);
+					fr=registrationrepo.saveAndFlush(fr);
+					regresult.setStatus(true);
+					regresult.setMessage("Successfully registered");
+
+				}
 			}
 
 		}
@@ -120,40 +120,57 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 	public PurchaseOrder purchaseFromSale(Integer customerId, Integer flashSaleId) {
 		// TODO Auto-generated method stub
 		Optional<FlashSaleRegistration> osr=registrationrepo.findById(customerId+"-"+flashSaleId);
-		
+
+
 		PurchaseOrder po=null;
 		FlashSale fs=null;
 		int itemsAvailable;
 		if(osr.isPresent())
 		{
+			System.out.println("status"+osr.get().getRegistrationStatus().equals(com.retail.proj.flashsale.pojo.RegistrationStatus.REGISTERED));
 			if(osr.get().getRegistrationStatus().equals(com.retail.proj.flashsale.pojo.RegistrationStatus.REGISTERED))
 			{
 
 				fs=osr.get().getFlashSale();
+
 				if(fs.getStatus())
 				{
-				itemsAvailable=fs.getUnitsAvailable()-1;
-			
+					po=new PurchaseOrder();
 
-				if(itemsAvailable>0)
-				fs.setUnitsAvailable(itemsAvailable);
-				else
-					fs.setStatus(false);
-				po=new PurchaseOrder();
-				flashSalerepo.saveAndFlush(fs);
-				po.setCreatedAt(new Date());
-				po.setCustomer(customerrepo.getOne(customerId));
-				po.setOrderStatus(PurchaseOrderStatus.PURCHASED);
-				po.setProduct(fs.getProduct());
-				po=orderrepo.saveAndFlush(po);
-				
+					po.setCreatedAt(new Date());
+					po.setCustomer(customerrepo.getOne(customerId));
+					po.setOrderStatus(PurchaseOrderStatus.PURCHASED);
+					po.setProduct(fs.getProduct());
+					System.out.print("size------->"+orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).size());
+					if(orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).size()>0)
+					{
+						po.setOrderStatus(PurchaseOrderStatus.ALREADYPURCHASED);
+						po=orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).get(0);
+						return po;
+					}
+
+					if(fs.getStatus())
+					{
+						itemsAvailable=fs.getUnitsAvailable()-1;
+
+
+						if(itemsAvailable>0)
+							fs.setUnitsAvailable(itemsAvailable);
+						else
+							fs.setStatus(false);
+
+						flashSalerepo.saveAndFlush(fs);
+						po=orderrepo.saveAndFlush(po);
+
+
+					}
 				}
-
 			}
 
 
 		}
-	
+
+
 		return po;
 
 	}
