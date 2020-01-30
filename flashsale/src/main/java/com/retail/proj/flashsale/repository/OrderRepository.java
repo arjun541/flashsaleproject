@@ -11,7 +11,7 @@ public interface OrderRepository extends JpaRepository<PurchaseOrder,String>{
 
 	
 
-	 @Query(value = "select * from purchaseorders where customer_id=?1 and product_id=?2", nativeQuery = true)
-	 ArrayList<PurchaseOrder> findPurchaseOrderExists(int customerId,int productId);
+	 @Query(value = "select * from purchaseorders where customer_id=?1 and product_id=?2 and flashsale_id=?3", nativeQuery = true)
+	 ArrayList<PurchaseOrder> findPurchaseOrderExists(int customerId,int productId, Integer integer);
 	
 }

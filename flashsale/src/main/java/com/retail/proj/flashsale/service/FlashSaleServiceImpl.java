@@ -142,10 +142,10 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 					po.setOrderStatus(PurchaseOrderStatus.PURCHASED);
 					po.setProduct(fs.getProduct());
 				
-					if(orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).size()>0)
+					if(orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId(),fs.getId()).size()>0)
 					{
 						po.setOrderStatus(PurchaseOrderStatus.ALREADYPURCHASED);
-						po=orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).get(0);
+						po=orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId(),fs.getId()).get(0);
 						return po;
 					}
                       synchronized (fs) {
@@ -170,6 +170,8 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 
 
 		}
+		
+	
 
 
 		return po;

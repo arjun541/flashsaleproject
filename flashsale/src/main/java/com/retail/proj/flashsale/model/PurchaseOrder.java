@@ -25,6 +25,10 @@ public class PurchaseOrder {
     @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+    
+    @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+    @JoinColumn(name = "flashsale_id")
+    private FlashSale flashSale;
 
     @Column(name = "created_at", columnDefinition = "timestamp without time zone")
     @Temporal(TemporalType.TIMESTAMP)
