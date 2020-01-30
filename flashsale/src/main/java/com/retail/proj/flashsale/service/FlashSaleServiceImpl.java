@@ -24,6 +24,7 @@ import com.retail.proj.flashsale.model.FlashSaleRegistration;
 import com.retail.proj.flashsale.model.PurchaseOrder;
 import com.retail.proj.flashsale.pojo.FlashSaleRegistrationResult;
 import com.retail.proj.flashsale.pojo.PurchaseOrderStatus;
+import com.retail.proj.flashsale.pojo.PurchaseResult;
 import com.retail.proj.flashsale.repository.CustomerRepository;
 import com.retail.proj.flashsale.repository.FlashSaleRepository;
 import com.retail.proj.flashsale.repository.OrderRepository;
@@ -117,11 +118,11 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 	}
 	@Override
 	@Transactional
-	public PurchaseOrder purchaseFromSale(Integer customerId, Integer flashSaleId) {
+	public PurchaseResult purchaseFromSale(Integer customerId, Integer flashSaleId) {
 		// TODO Auto-generated method stub
 		Optional<FlashSaleRegistration> osr=registrationrepo.findById(customerId+"-"+flashSaleId);
 
-
+         PurchaseResult pr=new PurchaseResult();
 		PurchaseOrder po=null;
 		FlashSale fs=null;
 		int itemsAvailable;
@@ -141,12 +142,17 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 					po.setCustomer(customerrepo.getOne(customerId));
 					po.setOrderStatus(PurchaseOrderStatus.PURCHASED);
 					po.setProduct(fs.getProduct());
+					po.setFlashSale(fs);
 				
 					if(orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId(),fs.getId()).size()>0)
 					{
 						po.setOrderStatus(PurchaseOrderStatus.ALREADYPURCHASED);
 						po=orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId(),fs.getId()).get(0);
-						return po;
+						//return po;
+						pr.setPurchaseOrderId(po.getId());
+						pr.setMessage("Already Purchased");
+						pr.setStatus(true);
+						return pr;
 					}
                       synchronized (fs) {
 						
@@ -159,22 +165,35 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 							fs.setUnitsAvailable(itemsAvailable);
 						else
 							fs.setStatus(false);
+					
+						
 
 						flashSalerepo.saveAndFlush(fs);
 						po=orderrepo.saveAndFlush(po);
+						pr.setPurchaseOrderId(po.getId());
+						pr.setMessage("Purchased");
+						pr.setStatus(true);
                       }
 
 					
 				}
+				
 			}
 
 
+		}
+		else
+		{
+			pr.setMessage("Not registered for sale ");
+			
+			pr.setStatus(false);
+			
 		}
 		
 	
 
 
-		return po;
+		return pr;
 
 	}
 }

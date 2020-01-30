@@ -89,5 +89,13 @@ public class PurchaseOrder {
 	public void setOrderStatus(PurchaseOrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
 	}
+
+	public FlashSale getFlashSale() {
+		return flashSale;
+	}
+
+	public void setFlashSale(FlashSale flashSale) {
+		this.flashSale = flashSale;
+	}
     
 }

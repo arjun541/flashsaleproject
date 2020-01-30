@@ -25,6 +25,7 @@ import com.retail.proj.flashsale.model.FlashSale;
 import com.retail.proj.flashsale.model.FlashSaleRegistration;
 import com.retail.proj.flashsale.model.PurchaseOrder;
 import com.retail.proj.flashsale.pojo.FlashSaleRegistrationResult;
+import com.retail.proj.flashsale.pojo.PurchaseResult;
 import com.retail.proj.flashsale.pojo.RegistrationRequest;
 import com.retail.proj.flashsale.service.FlashSaleSerice;
 
@@ -63,7 +64,7 @@ public class FlashSaleController {
 	public ResponseEntity<Object> purchase(@Validated @RequestBody RegistrationRequest fr)
 	{
 	
-		PurchaseOrder fg1=flashsaleserviceimpl.purchaseFromSale(fr.getCustomerId(),fr.getFlashSaleId());
+		PurchaseResult fg1=flashsaleserviceimpl.purchaseFromSale(fr.getCustomerId(),fr.getFlashSaleId());
 		
 		
 		return ResponseEntity.accepted().body(fg1);

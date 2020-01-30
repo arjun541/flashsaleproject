@@ -7,6 +7,7 @@ import com.retail.proj.flashsale.model.FlashSale;
 import com.retail.proj.flashsale.model.FlashSaleRegistration;
 import com.retail.proj.flashsale.model.PurchaseOrder;
 import com.retail.proj.flashsale.pojo.FlashSaleRegistrationResult;
+import com.retail.proj.flashsale.pojo.PurchaseResult;
 
 public interface FlashSaleSerice {
 	
@@ -20,6 +21,6 @@ public interface FlashSaleSerice {
 
 	FlashSaleRegistrationResult registerForSale(Integer c, Integer f);
 
-	public PurchaseOrder purchaseFromSale(Integer customerId, Integer flashSaleId);
+	public PurchaseResult purchaseFromSale(Integer customerId, Integer flashSaleId);
 
 }

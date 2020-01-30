@@ -13,6 +13,7 @@ import org.springframework.data.domain.Example;
 
 import com.retail.proj.flashsale.model.PurchaseOrder;
 import com.retail.proj.flashsale.pojo.FlashSaleRegistrationResult;
+import com.retail.proj.flashsale.pojo.PurchaseResult;
 import com.retail.proj.flashsale.repository.FlashSaleRepository;
 import com.retail.proj.flashsale.repository.OrderRepository;
 import com.retail.proj.flashsale.repository.RegistrationRepository;
@@ -47,8 +48,8 @@ class FlashsaleApplicationTests {
 	    public void purchaseproduct_whenRegistered_thenGetOk() {
 	   
 		  fs.registerForSale(1, 3);
-		 PurchaseOrder po= fs.purchaseFromSale(1, 3);
-		 assertTrue(po.getCustomer().getId()==1);
+		 PurchaseResult po= fs.purchaseFromSale(1, 3);
+		 assertTrue(po.getStatus());
 		  
 	         
 	        
@@ -57,8 +58,8 @@ class FlashsaleApplicationTests {
 	    public void purchaseproduct_whenNotRegistered_thenGetNotOk() {
 	   
 		  
-		 PurchaseOrder po= fs.purchaseFromSale(4, 3);
-		 assertTrue(po==null);
+		  PurchaseResult po= fs.purchaseFromSale(4, 3);
+		 assertFalse(po.getStatus());
 	         
 	        
 	    }

@@ -6,7 +6,7 @@ public class PurchaseResult {
 
 	    private String message;
 
-	    private String purchaseOrderId;
+	    private int purchaseOrderId;
 
 		public Boolean getStatus() {
 			return status;
@@ -24,11 +24,11 @@ public class PurchaseResult {
 			this.message = message;
 		}
 
-		public String getPurchaseOrderId() {
+		public int getPurchaseOrderId() {
 			return purchaseOrderId;
 		}
 
-		public void PurchaseOrderId(String purchaseOrderId) {
+		public void setPurchaseOrderId(int purchaseOrderId) {
 			this.purchaseOrderId = purchaseOrderId;
 		}
 }
