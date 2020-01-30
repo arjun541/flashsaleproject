@@ -4,7 +4,7 @@ This is a demo implementation for a possible flash sales in any ecommerce websit
 setup:
 we are using the inmemory database h2 and all the customer and product and sale information are pre loaded.
 
-you can change the server port and all other details in applocation.properties
+you can change the server port and all other details in application.properties
 This application contains two public facing APIs for registartion to a sale and purchase of a product in sale.
 
 we have two apis register and purchase 
