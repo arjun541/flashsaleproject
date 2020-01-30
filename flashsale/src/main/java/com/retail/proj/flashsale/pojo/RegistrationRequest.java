@@ -1,10 +1,13 @@
 package com.retail.proj.flashsale.pojo;
 
+import javax.validation.constraints.NotNull;
+
+
 
 public class RegistrationRequest {
-	
+	@NotNull(message = "Customer Id  has to be present")
 	private Integer customerId;
-
+    @NotNull (message = "flash sale Id  has to be present")
 	private Integer flashSaleId;
 	
 	public RegistrationRequest() {

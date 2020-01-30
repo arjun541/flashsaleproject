@@ -127,7 +127,7 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 		int itemsAvailable;
 		if(osr.isPresent())
 		{
-			System.out.println("status"+osr.get().getRegistrationStatus().equals(com.retail.proj.flashsale.pojo.RegistrationStatus.REGISTERED));
+			
 			if(osr.get().getRegistrationStatus().equals(com.retail.proj.flashsale.pojo.RegistrationStatus.REGISTERED))
 			{
 
@@ -141,16 +141,17 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 					po.setCustomer(customerrepo.getOne(customerId));
 					po.setOrderStatus(PurchaseOrderStatus.PURCHASED);
 					po.setProduct(fs.getProduct());
-					System.out.print("size------->"+orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).size());
+				
 					if(orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).size()>0)
 					{
 						po.setOrderStatus(PurchaseOrderStatus.ALREADYPURCHASED);
 						po=orderrepo.findPurchaseOrderExists(customerId, fs.getProduct().getId()).get(0);
 						return po;
 					}
-
-					if(fs.getStatus())
-					{
+                      synchronized (fs) {
+						
+					
+				
 						itemsAvailable=fs.getUnitsAvailable()-1;
 
 
@@ -161,9 +162,9 @@ public class FlashSaleServiceImpl  implements FlashSaleSerice{
 
 						flashSalerepo.saveAndFlush(fs);
 						po=orderrepo.saveAndFlush(po);
+                      }
 
-
-					}
+					
 				}
 			}
 
